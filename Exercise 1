@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>-ING Forms Classification Exercise</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            margin-top: 10px;
+            opacity: 0.9;
+            font-size: 1.2em;
+        }
+        
+        .instructions {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+        
+        .category-guide {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .category-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .noun { border-left-color: #28a745; }
+        .adjective { border-left-color: #007bff; }
+        .verb { border-left-color: #ffc107; }
+        .adverb { border-left-color: #dc3545; }
+        
+        .exercise {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .sentence {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        .sentence-number {
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .option {
+            background: #e9ecef;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .option:hover {
+            background: #dee2e6;
+            transform: translateY(-1px);
+        }
+        
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #5a67d8;
+        }
+        
+        .option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #1e7e34;
+        }
+        
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #bd2130;
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .results {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .check-btn, .reset-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .check-btn:hover, .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>-ING Forms Classification</h1>
+        <div class="subtitle">Identify whether each highlighted -ING form functions as a noun, adjective, verb, or adverb</div>
+    </div>
+
+    <div class="instructions">
+        <h3>Quick Reference Guide</h3>
+        <div class="category-guide">
+            <div class="category-card noun">
+                <h4>As a NOUN (Gerund)</h4>
+                <p><strong>Swimming</strong> is fun<br>
+                I enjoy <strong>reading</strong><br>
+                After <strong>studying</strong>...</p>
+            </div>
+            <div class="category-card adjective">
+                <h4>As an ADJECTIVE (Participle)</h4>
+                <p>An <strong>exciting</strong> match<br>
+                The book is <strong>boring</strong><br>
+                A man <strong>standing</strong> there</p>
+            </div>
+            <div class="category-card verb">
+                <h4>As a VERB (Continuous)</h4>
+                <p>I am <strong>studying</strong><br>
+                She was <strong>reading</strong><br>
+                They are <strong>playing</strong></p>
+            </div>
+            <div class="category-card adverb">
+                <h4>As an ADVERB (Participle)</h4>
+                <p><strong>Walking</strong> home, I...<br>
+                <strong>Being</strong> tired, she...<br>
+                He left, <strong>feeling</strong> sad</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>Classification Exercise</h2>
+        <p>Choose the correct function for each highlighted -ING form:</p>
+
+        <div class="sentence">
+            <div class="sentence-number">1</div>
+            <p><span class="highlight">Swimming</span> is very good for your health.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Swimming" is the subject of the sentence, functioning as a noun.</p>
+                <p><strong>Incorrect.</strong> "Swimming" is the subject of the sentence, so it functions as a noun.</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">2</div>
+            <p>That programme was really <span class="highlight">boring</span>.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Boring" describes the programme, functioning as an adjective after the linking verb "was".</p>
+                <p><strong>Incorrect.</strong> "Boring" describes the programme, so it functions as an adjective after the linking verb "was".</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">3</div>
+            <p>I am currently <span class="highlight">learning</span> French at university.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Learning" is part of the present continuous tense "am learning", functioning as a verb.</p>
+                <p><strong>Incorrect.</strong> "Learning" is part of the present continuous tense "am learning", so it functions as a verb.</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">4</div>
+            <p>We enjoy <span class="highlight">studying</span> English grammar.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Studying" is the object of the verb "enjoy", functioning as a noun.</p>
+                <p><strong>Incorrect.</strong> "Studying" is the object of the verb "enjoy", so it functions as a noun.</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">5</div>
+            <p><span class="highlight">Walking</span> to campus, I met my friend from high school.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Walking to campus" modifies the main clause, explaining when/how the meeting happened, functioning as an adverb.</p>
+                <p><strong>Incorrect.</strong> "Walking to campus" modifies the main clause, explaining when/how the meeting happened, so it functions as an adverb.</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">6</div>
+            <p>The most <span class="highlight">challenging</span> part of LEA studies is business terminology.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Challenging" modifies the noun "part", functioning as an adjective.</p>
+                <p><strong>Incorrect.</strong> "Challenging" modifies the noun "part", so it functions as an adjective.</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">7</div>
+            <p>I heard someone <span class="highlight">playing</span> the piano in the music room.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Playing" describes the ongoing action after a verb of perception, functioning as a verb.</p>
+                <p><strong>Incorrect.</strong> "Playing" describes the ongoing action after a verb of perception, so it functions as a verb.</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">8</div>
+            <p>Some people are not interested in <span class="highlight">learning</span> foreign languages.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Learning" follows the preposition "in", functioning as a noun (gerund).</p>
+                <p><strong>Incorrect.</strong> "Learning" follows the preposition "in", so it functions as a noun (gerund).</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">9</div>
+            <p><span class="highlight">Being</span> a first-year student, she finds university life quite different from high school.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Being a first-year student" gives the reason for the main statement, functioning as an adverb.</p>
+                <p><strong>Incorrect.</strong> "Being a first-year student" gives the reason for the main statement, so it functions as an adverb.</p>
+            </div>
+        </div>
+
+        <div class="sentence">
+            <div class="sentence-number">10</div>
+            <p>The students were <span class="highlight">discussing</span> their Erasmus application plans.</p>
+            <div class="options">
+                <div class="option" data-answer="noun">Noun</div>
+                <div class="option" data-answer="adjective">Adjective</div>
+                <div class="option" data-answer="verb">Verb</div>
+                <div class="option" data-answer="adverb">Adverb</div>
+            </div>
+            <div class="feedback">
+                <p><strong>Correct!</strong> "Discussing" is part of the past continuous tense "were discussing", functioning as a verb.</p>
+                <p><strong>Incorrect.</strong> "Discussing" is part of the past continuous tense "were discussing", so it functions as a verb.</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="check-btn" onclick="checkAnswers()">Check All Answers</button>
+            <button class="reset-btn" onclick="resetExercise()">Reset Exercise</button>
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <h2>Exercise Results</h2>
+        <div class="score" id="score">0/10</div>
+        <p id="feedback-message"></p>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            1: 'noun',      // Swimming is very good for your health
+            2: 'adjective', // That programme was really boring
+            3: 'verb',      // I am currently learning French
+            4: 'noun',      // We enjoy studying English grammar
+            5: 'adverb',    // Walking to campus, I met my friend
+            6: 'adjective', // The most challenging part
+            7: 'verb',      // I heard someone playing the piano
+            8: 'noun',      // interested in learning foreign languages
+            9: 'adverb',    // Being a first-year student
+            10: 'verb'      // The students were discussing
+        };
+
+        let userAnswers = {};
+
+        // Handle option selection
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const sentence = this.closest('.sentence');
+                const sentenceNum = Array.from(sentence.parentElement.children).indexOf(sentence) + 1;
+                const options = sentence.querySelectorAll('.option');
+                
+                // Remove previous selection
+                options.forEach(opt => opt.classList.remove('selected'));
+                
+                // Select current option
+                this.classList.add('selected');
+                
+                // Store user answer
+                userAnswers[sentenceNum] = this.dataset.answer;
+            });
+        });
+
+        function checkAnswers() {
+            let score = 0;
+            const totalQuestions = Object.keys(correctAnswers).length;
+
+            Object.keys(correctAnswers).forEach(questionNum => {
+                const sentence = document.querySelectorAll('.sentence')[questionNum - 1];
+                const options = sentence.querySelectorAll('.option');
+                const feedback = sentence.querySelector('.feedback');
+                const userAnswer = userAnswers[questionNum];
+                const correctAnswer = correctAnswers[questionNum];
+
+                // Reset option styles
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect');
+                });
+
+                if (userAnswer) {
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                        // Mark correct answer
+                        options.forEach(opt => {
+                            if (opt.dataset.answer === correctAnswer) {
+                                opt.classList.add('correct');
+                            }
+                        });
+                        feedback.className = 'feedback show correct';
+                        feedback.innerHTML = feedback.children[0].innerHTML;
+                    } else {
+                        // Mark incorrect answer and show correct one
+                        options.forEach(opt => {
+                            if (opt.dataset.answer === userAnswer) {
+                                opt.classList.add('incorrect');
+                            } else if (opt.dataset.answer === correctAnswer) {
+                                opt.classList.add('correct');
+                            }
+                        });
+                        feedback.className = 'feedback show incorrect';
+                        feedback.innerHTML = feedback.children[1].innerHTML;
+                    }
+                } else {
+                    // Show correct answer for unanswered questions
+                    options.forEach(opt => {
+                        if (opt.dataset.answer === correctAnswer) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                    feedback.className = 'feedback show incorrect';
+                    feedback.innerHTML = '<p><strong>No answer selected.</strong> ' + feedback.children[1].innerHTML.replace('<p><strong>Incorrect.</strong> ', '') + '</p>';
+                }
+            });
+
+            // Show results
+            const resultsDiv = document.getElementById('results');
+            const scoreDiv = document.getElementById('score');
+            const feedbackMessage = document.getElementById('feedback-message');
+
+            scoreDiv.textContent = `${score}/${totalQuestions}`;
+            
+            if (score === totalQuestions) {
+                feedbackMessage.innerHTML = 'Perfect! You have excellent understanding of -ING forms!';
+            } else if (score >= totalQuestions * 0.8) {
+                feedbackMessage.innerHTML = 'Great job! You have a strong grasp of -ING forms.';
+            } else if (score >= totalQuestions * 0.6) {
+                feedbackMessage.innerHTML = 'Good work! Review the incorrect answers to improve your understanding.';
+            } else {
+                feedbackMessage.innerHTML = 'Keep studying! Review the reference guide and try again.';
+            }
+
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetExercise() {
+            // Clear user answers
+            userAnswers = {};
+
+            // Reset all options
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // Hide all feedback
+            document.querySelectorAll('.feedback').forEach(feedback => {
+                feedback.classList.remove('show');
+            });
+
+            // Hide results
+            document.getElementById('results').style.display = 'none';
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
